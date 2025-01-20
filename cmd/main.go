@@ -8,6 +8,7 @@ import (
 	"song-library/configs"
 	"song-library/db"
 	"song-library/logger"
+	"song-library/pkg/handlers"
 	"song-library/server"
 	"syscall"
 )
