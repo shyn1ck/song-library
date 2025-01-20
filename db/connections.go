@@ -13,7 +13,7 @@ var dbConn *gorm.DB
 
 func ConnectToDB() error {
 	if os.Getenv("DB_PASSWORD") == "" {
-		logger.Error.Printf("[db.ConnectToDB] DB_PASSWORD is not set ")
+		logger.Error.Printf("")
 		return fmt.Errorf("DB_PASSWORD environment variable is not set")
 	}
 
@@ -27,11 +27,9 @@ func ConnectToDB() error {
 
 	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	if err != nil {
-		logger.Error.Printf("[db.ConnectToDB] Failed to connect to DB: %v", err)
 		fmt.Printf("Failed to connect to database: %v\n", err)
 		return err
 	}
-	logger.Info.Printf("[db.ConnectToDB] Connected to DB")
 	fmt.Println("Connected to database")
 	dbConn = db
 	return nil
