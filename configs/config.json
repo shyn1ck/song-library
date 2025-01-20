@@ -1,10 +1,26 @@
 {
-  "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true
+  "log_params": {
+    "log_directory": "logs",
+    "log_info": "info.log",
+    "log_error": "error.log",
+    "log_warn": "warn.log",
+    "log_debug": "debug.log",
+    "max_size_megabytes": 10,
+    "max_backups": 4,
+    "max_age": 30,
+    "compress": true,
+    "local_time": true
+  },
+  "app_params": {
+    "gin_mode": "debug",
+    "port_run": "8181",
+    "server_url": "localhost",
+    "server_name": "song-library"
+  },
+  "postgres_params": {
+    "host": "localhost",
+    "port": "5432",
+    "user": "postgres",
+    "database": "song_library_db"
   }
 }
