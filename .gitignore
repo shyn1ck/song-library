@@ -1,3 +1,6 @@
+# Environment variable files
+.env
+
 # Directories and files related to Go dependencies
 /vendor/
 
