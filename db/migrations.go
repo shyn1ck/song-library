@@ -3,18 +3,18 @@ package db
 import (
 	"errors"
 	"fmt"
-	"song-library/logger"
+	"song-library/models"
 )
 
 func Migrate() (err error) {
 	if dbConn == nil {
-
-		logger.Error.Printf("[db.Migrate]: database connection is not initialized: %v", err)
 		return errors.New("database connection is not initialized")
 
 	}
 
-	migrateModels := []interface{}{}
+	migrateModels := []interface{}{
+		&models.Song{},
+	}
 
 	for _, model := range migrateModels {
 		err := dbConn.AutoMigrate(model)
