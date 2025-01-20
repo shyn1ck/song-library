@@ -1,0 +1,27 @@
+# Directories and files related to Go dependencies
+/vendor/
+
+# Compiled Go binary files
+*.exe
+*.exe~
+*.out
+*.test
+
+# Directories with Go binaries
+/bin/
+/obj/
+
+# System files
+.DS_Store
+
+# GoLand project files
+.idea/
+
+# Log files
+*.log
+
+# Cached Go files
+/go.sum
+
+# Local IDE configurations and settings
+.vscode/
