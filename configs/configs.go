@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"song-library/models"
 )
 
 var AppSettings models.AppConfig
 
 func ReadSettings() error {
 	fmt.Println("Starting reading settings file")
-	configFile, err := os.Open("configs/configs.json")
+	configFile, err := os.Open("configs/config.json")
 	if err != nil {
 		return errors.New(fmt.Sprintf("Couldn't open config file. Error is: %s", err.Error()))
 	}
