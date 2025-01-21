@@ -14,6 +14,13 @@ import (
 	"syscall"
 )
 
+// @title Song Library API ✨
+// @version 1.0
+// @description API for managing a song library. Allows adding, editing, deleting, and searching for songs.
+
+// @host localhost:8181
+// @BasePath /
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		logger.Error.Printf("Error loading .env file")
