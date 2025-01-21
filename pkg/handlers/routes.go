@@ -15,7 +15,6 @@ func InitRoutes() *gin.Engine {
 	gin.SetMode(configs.AppSettings.AppParams.GinMode)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	r.GET("/ping", PingPong)
 
 	songGroup := r.Group("/songs")
@@ -25,7 +24,12 @@ func InitRoutes() *gin.Engine {
 		songGroup.POST("/", AddSong)
 		songGroup.PUT("/:id", UpdateSong)
 		songGroup.DELETE("/:id", DeleteSong)
+	}
 
+	lyricsGroup := r.Group("/lyrics")
+	{
+		lyricsGroup.GET("/:title", GetLyrics)
+		lyricsGroup.GET("/", GetLyricsByText)
 	}
 
 	if err := r.Run(fmt.Sprintf("%s:%s", configs.AppSettings.AppParams.ServerURL, configs.AppSettings.AppParams.PortRun)); err != nil {
