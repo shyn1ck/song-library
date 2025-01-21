@@ -72,6 +72,18 @@ func SoftDeleteSong(id uint) error {
 	return repository.SoftDeleteSong(id)
 }
 
+func HardDeleteSong(id uint) (err error) {
+	song, err := repository.GetSongByID(id)
+	if err != nil {
+		return err
+	}
+	if song == nil {
+		logger.Error.Printf("[services.HardDeleteSong]: Song does not exist")
+		return utils.ErrSongNotFound
+	}
+	return repository.HardDeleteSong(id)
+}
+
 func GetLyrics(song string, page int, limit int) ([]string, error) {
 	if page <= 0 || limit <= 0 || limit > 100 {
 		logger.Error.Printf("services.GetLyrics: page %d or limit %d", page, limit)
