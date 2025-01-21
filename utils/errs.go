@@ -24,4 +24,5 @@ var (
 	ErrInvalidID                    = errors.New("ErrInvalidID")
 	ErrInvalidRequestBody           = errors.New("ErrInvalidRequestBody")
 	ErrInvalidRequestParameter      = errors.New("ErrInvalidRequestParameter")
+	ErrGroupNotFound                = errors.New("ErrGroupNotFound")
 )
