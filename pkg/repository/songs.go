@@ -7,13 +7,14 @@ import (
 	"song-library/models"
 	"song-library/utils"
 	"strings"
+	"time"
 )
 
 func GetSongs(group, song string, page, limit int) ([]models.Song, error) {
 	var songs []models.Song
 	offset := (page - 1) * limit
 
-	query := db.GetDBConn().Model(&songs)
+	query := db.GetDBConn().Model(&songs).Where("deleted_at IS NULL")
 
 	if group != "" {
 		query = query.Where("\"group\" = ?", group)
@@ -37,9 +38,21 @@ func GetSongs(group, song string, page, limit int) ([]models.Song, error) {
 	return songs, nil
 }
 
+func GetSongByID(id uint) (*models.Song, error) {
+	var song models.Song
+	err := db.GetDBConn().Where("id = ? AND deleted_at IS NULL", id).First(&song).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, utils.ErrDatabaseConnectionFailed
+	}
+	return &song, nil
+}
+
 func GetLyrics(songName string, page, limit int) (verses []string, err error) {
 	var song models.Song
-	err = db.GetDBConn().Where("song = ?", songName).First(&song).Error
+	err = db.GetDBConn().Where("song = ? AND deleted_at IS NULL", songName).First(&song).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, utils.ErrSongNotFound
@@ -65,7 +78,7 @@ func GetLyrics(songName string, page, limit int) (verses []string, err error) {
 
 func GetLyricsByText(searchText string, page, limit int) ([]string, error) {
 	var songs []models.Song
-	err := db.GetDBConn().Where("text LIKE ?", "%"+searchText+"%").Find(&songs).Error
+	err := db.GetDBConn().Where("text LIKE ? AND deleted_at IS NULL", "%"+searchText+"%").Find(&songs).Error
 	if err != nil {
 		return nil, utils.ErrDatabaseConnectionFailed
 	}
@@ -88,4 +101,23 @@ func GetLyricsByText(searchText string, page, limit int) ([]string, error) {
 	}
 
 	return verses[start:end], nil
+}
+
+func SoftDeleteSong(id uint) (err error) {
+	var song models.Song
+	if err := db.GetDBConn().First(&song, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ErrSongNotFound
+		}
+		return utils.ErrDatabaseConnectionFailed
+	}
+
+	currentTime := time.Now()
+	song.DeletedAt = &currentTime
+
+	if err := db.GetDBConn().Save(&song).Error; err != nil {
+		return utils.ErrDatabaseConnectionFailed
+	}
+
+	return nil
 }
