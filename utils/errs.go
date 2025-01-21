@@ -23,4 +23,5 @@ var (
 	ErrMissingRequiredField         = errors.New("ErrMissingRequiredField")
 	MissingParameters               = errors.New("MissingParameters")
 	ErrInvalidID                    = errors.New("ErrInvalidID")
+	ErrInvalidRequestBody           = errors.New("ErrInvalidRequestBody")
 )
