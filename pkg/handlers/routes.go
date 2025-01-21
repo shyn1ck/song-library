@@ -24,6 +24,7 @@ func InitRoutes() *gin.Engine {
 		songGroup.POST("/", AddSong)
 		songGroup.PUT("/:id", UpdateSong)
 		songGroup.DELETE("/:id", SoftDeleteSong)
+		songGroup.DELETE("/hard/:id", HardDeleteSong)
 	}
 
 	lyricsGroup := r.Group("/lyrics")
