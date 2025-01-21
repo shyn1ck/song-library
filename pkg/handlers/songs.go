@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"song-library/logger"
+	"song-library/models"
 	services "song-library/pkg/services"
 	"song-library/utils"
 	"strconv"
@@ -237,11 +239,4 @@ func AddSong(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.AddSong] Client IP: %s - Request to add song\n", ip)
 
-}
-
-func UpdateSong(c *gin.Context) {
-	id := c.Param("id")
-	ip := c.ClientIP()
-
-	logger.Info.Printf("[handlers.UpdateSong] Client IP: %s - Request to update song by id: %s\n", ip, id)
 }
