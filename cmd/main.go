@@ -68,6 +68,14 @@ func main() {
 		}
 	}()
 
+	secondaryServer := new(server.Server)
+	go func() {
+		fmt.Printf("Starting secondary server on port 8182\n")
+		if err := secondaryServer.Run(configs.AppSettings.AppParams.ApiPortRun, handlers.InitRoutes()); err != nil {
+			logger.Error.Fatalf("Error starting secondary HTTP server: %s", err)
+		}
+	}()
+
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
