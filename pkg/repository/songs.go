@@ -25,6 +25,7 @@ func GetSongs(group, song string, page, limit int) ([]models.Song, error) {
 
 	err := query.Offset(offset).Limit(limit).Find(&songs).Error
 	if err != nil {
+		logger.Error.Printf("[repository.GetSongs]: Error finding songs: %s\n", err.Error())
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
