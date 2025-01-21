@@ -86,6 +86,7 @@ func GetLyrics(song string, page int, limit int) ([]string, error) {
 
 func GetLyricsByText(searchText string, page int, limit int) ([]string, error) {
 	if page <= 0 || limit <= 0 || limit > 100 {
+		logger.Error.Printf("services.GetLyrics: page %d or limit %d", page, limit)
 		return nil, utils.ErrInvalidPaginationParams
 	}
 
