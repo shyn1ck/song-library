@@ -33,9 +33,7 @@ func InitRoutes() *gin.Engine {
 		lyricsGroup.GET("/", GetLyricsByText)
 	}
 
-	if err := r.Run(fmt.Sprintf("%s:%s", configs.AppSettings.AppParams.ServerURL, configs.AppSettings.AppParams.PortRun)); err != nil {
-		logger.Error.Fatalf("Error starting server: %v", err)
-	}
+	r.GET("API/info", ApiInfo)
 	return r
 }
 
