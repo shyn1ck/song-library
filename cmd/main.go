@@ -70,7 +70,7 @@ func main() {
 
 	secondaryServer := new(server.Server)
 	go func() {
-		fmt.Printf("Starting secondary server on port 8182\n")
+		fmt.Printf("Starting secondary server on port %s\n", configs.AppSettings.AppParams.ApiPortRun)
 		if err := secondaryServer.Run(configs.AppSettings.AppParams.ApiPortRun, handlers.InitRoutes()); err != nil {
 			logger.Error.Fatalf("Error starting secondary HTTP server: %s", err)
 		}
