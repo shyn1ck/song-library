@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"song-library/db"
+	"song-library/logger"
 	"song-library/models"
 	"song-library/utils"
 	"strings"
@@ -15,7 +16,6 @@ func GetSongs(group, song string, page, limit int) ([]models.Song, error) {
 	offset := (page - 1) * limit
 
 	query := db.GetDBConn().Model(&songs).Where("deleted_at IS NULL")
-
 	if group != "" {
 		query = query.Where("\"group\" = ?", group)
 	}
@@ -35,7 +35,6 @@ func GetSongs(group, song string, page, limit int) ([]models.Song, error) {
 	if len(songs) == 0 {
 		return nil, nil
 	}
-
 	return songs, nil
 }
 
@@ -70,20 +69,15 @@ func GetLyrics(songName string, page, limit int) (verses []string, err error) {
 		}
 		return nil, utils.ErrDatabaseConnectionFailed
 	}
-
 	verses = strings.Split(song.Text, "\n\n")
-
 	start := (page - 1) * limit
 	end := start + limit
-
 	if start >= len(verses) {
 		return nil, nil
 	}
-
 	if end > len(verses) {
 		end = len(verses)
 	}
-
 	return verses[start:end], nil
 }
 
