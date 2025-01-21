@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+	"gorm.io/gorm"
 	"song-library/db"
 	"song-library/logger"
 	"song-library/models"
