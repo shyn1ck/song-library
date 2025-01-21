@@ -34,6 +34,30 @@ func GetSongByID(id uint) (song *models.Song, err error) {
 	return song, nil
 }
 
+func UpdateSong(id uint, songUpdate *models.Song) error {
+	existingSong, err := repository.GetSongByID(id)
+	if err != nil {
+		logger.Error.Printf("[services.UpdateSong]: Error getting existing song: %v", err)
+		return err
+	}
+
+	if existingSong == nil {
+		logger.Error.Printf("[services.UpdateSong]: Song does not exist")
+		return utils.ErrSongNotFound
+	}
+
+	existingSong.Group = songUpdate.Group
+	existingSong.Song = songUpdate.Song
+	existingSong.ReleaseDate = songUpdate.ReleaseDate
+	existingSong.Text = songUpdate.Text
+	existingSong.Link = songUpdate.Link
+	existingSong.UpdatedAt = time.Now()
+	if err := repository.UpdateSong(existingSong); err != nil {
+		return err
+	}
+	return nil
+}
+
 func SoftDeleteSong(id uint) error {
 	song, err := repository.GetSongByID(id)
 	if err != nil {
