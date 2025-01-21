@@ -22,4 +22,5 @@ var (
 	ErrFailedToGenerateSwagger      = errors.New("ErrFailedToGenerateSwagger")
 	ErrMissingRequiredField         = errors.New("ErrMissingRequiredField")
 	MissingParameters               = errors.New("MissingParameters")
+	ErrInvalidID                    = errors.New("ErrInvalidID")
 )
