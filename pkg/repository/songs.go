@@ -43,6 +43,7 @@ func GetSongByID(id uint) (*models.Song, error) {
 	var song models.Song
 	err := db.GetDBConn().Where("id = ? AND deleted_at IS NULL", id).First(&song).Error
 	if err != nil {
+		logger.Error.Printf("[repository.GetSongByID]: Error finding song: %s\n", err.Error())
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
