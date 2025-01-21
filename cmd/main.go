@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"song-library/configs"
 	"song-library/db"
-	"song-library/logger"
 	"song-library/pkg/handlers"
 	"song-library/server"
 	"syscall"
@@ -23,76 +22,68 @@ import (
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		fmt.Printf("Error loading .env file: %v", err)
+		fmt.Printf("Error loading .env file: %v\n", err)
 	} else {
 		fmt.Println(".env file loaded successfully")
 	}
 
 	if err := configs.ReadSettings(); err != nil {
-		fmt.Printf("Error reading settings: %v", err)
+		fmt.Printf("Error reading settings: %v\n", err)
+		return
 	} else {
 		fmt.Printf("Settings loaded: %+v\n", configs.AppSettings.AppParams)
 	}
 
-	if err := logger.Init(); err != nil {
-		fmt.Printf("Error initializing logger: %v", err)
-	} else {
-		fmt.Println("Logger initialized successfully")
-	}
-
 	if err := db.ConnectToDB(); err != nil {
-		fmt.Printf("Error connecting to DB: %v", err)
-	} else {
-		fmt.Println("Connected to the database successfully")
+		fmt.Printf("Error connecting to DB: %v\n", err)
+		return
 	}
-
 	defer func() {
 		if err := db.CloseDBConn(); err != nil {
-			logger.Error.Printf("Error closing database connection: %v", err)
+			fmt.Printf("Error closing database connection: %v\n", err)
 		} else {
 			fmt.Println("Database connection closed successfully")
 		}
 	}()
+	fmt.Println("Connected to the database successfully")
 
 	if err := db.Migrate(); err != nil {
-		fmt.Printf("Error initializing database migrations: %v", err)
-	} else {
-		fmt.Println("Database migrations completed successfully")
+		fmt.Printf("Error initializing database migrations: %v\n", err)
+		return
 	}
+	fmt.Println("Database migrations completed successfully")
 
 	mainServer := new(server.Server)
+	apiServer := new(server.Server)
+
 	go func() {
-		fmt.Printf("Starting server on port %s\n", configs.AppSettings.AppParams.PortRun)
-		if err := mainServer.Run(configs.AppSettings.AppParams.PortRun, handlers.InitRoutes()); err != nil {
-			logger.Error.Fatalf("Error starting HTTP server: %s", err)
+		appPort := configs.AppSettings.AppParams.PortRun
+		fmt.Printf("Starting application server on port %s\n", appPort)
+		if err := mainServer.Run(appPort, handlers.InitRoutes()); err != nil {
+			fmt.Printf("Error starting application server: %s\n", err)
 		}
 	}()
 
-	secondaryServer := new(server.Server)
 	go func() {
-		fmt.Printf("Starting secondary server for API on port %s\n", configs.AppSettings.AppParams.ApiPortRun)
-		if err := secondaryServer.Run(configs.AppSettings.AppParams.ApiPortRun, handlers.InitRoutes()); err != nil {
-			logger.Error.Fatalf("Error starting secondary HTTP server: %s", err)
+		apiPort := configs.AppSettings.AppParams.ApiPortRun
+		fmt.Printf("Starting API server on port %s\n", apiPort)
+		if err := apiServer.Run(apiPort, handlers.InitRoutes()); err != nil {
+			fmt.Printf("Error starting API server: %s\n", err)
 		}
 	}()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
-
-	if sqlDB, err := db.GetDBConn().DB(); err == nil {
-		if err := sqlDB.Close(); err != nil {
-			logger.Error.Fatalf("Error closing DB: %s", err)
-		} else {
-			fmt.Println("Database connection closed successfully")
-		}
-	} else {
-		logger.Error.Fatalf("Error getting *sql.DB from GORM: %s", err)
-	}
+	fmt.Println("Shutting down servers...")
 
 	if err := mainServer.Shutdown(context.Background()); err != nil {
-		logger.Error.Fatalf("Error during server shutdown: %s", err)
-	} else {
-		fmt.Println("Server shut down gracefully")
+		fmt.Printf("Error during application server shutdown: %s\n", err)
 	}
+	fmt.Println("Application server shut down gracefully")
+
+	if err := apiServer.Shutdown(context.Background()); err != nil {
+		fmt.Printf("Error during API server shutdown: %s\n", err)
+	}
+	fmt.Println("API server shut down gracefully")
 }
