@@ -18,3 +18,28 @@ func GetSongs(group, song string, page, limit int) (songs []models.Song, err err
 
 	return songs, nil
 }
+
+func GetLyrics(song string, page int, limit int) ([]string, error) {
+	if page <= 0 || limit <= 0 || limit > 100 {
+		return nil, utils.ErrInvalidPaginationParams
+	}
+	verses, err := repository.GetLyrics(song, page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return verses, nil
+}
+
+func GetLyricsByText(searchText string, page int, limit int) ([]string, error) {
+	if page <= 0 || limit <= 0 || limit > 100 {
+		return nil, utils.ErrInvalidPaginationParams
+	}
+
+	verses, err := repository.GetLyricsByText(searchText, page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return verses, nil
+}
