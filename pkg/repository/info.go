@@ -28,3 +28,18 @@ func GetInfoBySong(song string) (bool, error) {
 
 	return count > 0, nil
 }
+
+func GetSongDetail(group, song string) (songDetail models.SongDetail, err error) {
+	err = db.GetDBConn().Model(&models.SongDetail{}).
+		Where("group = ? AND song = ? AND deleted_at IS NULL", group, song).
+		First(&songDetail).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.SongDetail{}, utils.ErrSongNotFound
+		}
+		logger.Error.Printf("[repository.GetSongDetail]: Error finding song details: %s\n", err.Error())
+		return models.SongDetail{}, utils.ErrDatabaseConnectionFailed
+	}
+	return songDetail, nil
+}
