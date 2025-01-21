@@ -19,7 +19,6 @@ func InitRoutes() *gin.Engine {
 	{
 		songGroup.GET("/", GetSongs)
 		songGroup.GET("/:id", GetSongByID)
-		songGroup.POST("/", AddSong)
 		songGroup.PUT("/:id", UpdateSong)
 		songGroup.DELETE("/:id", SoftDeleteSong)
 		songGroup.DELETE("/hard/:id", HardDeleteSong)
