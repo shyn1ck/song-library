@@ -117,6 +117,7 @@ func GetLyricsByText(searchText string, page, limit int) ([]string, error) {
 func SoftDeleteSong(id uint) (err error) {
 	var song models.Song
 	if err := db.GetDBConn().First(&song, id).Error; err != nil {
+		logger.Error.Printf("[repository.SoftDeleteSong]: Error finding song: %s\n", err.Error())
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return utils.ErrSongNotFound
 		}
