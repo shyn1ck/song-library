@@ -84,6 +84,37 @@ func GetSongByID(c *gin.Context) {
 	c.JSON(http.StatusOK, song)
 }
 
+func UpdateSong(c *gin.Context) {
+	ip := c.ClientIP()
+	idParam := c.Param("id")
+
+	logger.Info.Printf("[handlers.UpdateSong] Client IP: %s - Request to update song by id: %s", ip, idParam)
+
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		logger.Error.Printf("[handlers.UpdateSong] Invalid ID format: %s", err)
+		handleError(c, utils.ErrInvalidID)
+		return
+	}
+
+	var songUpdate models.Song
+	if err := c.ShouldBindJSON(&songUpdate); err != nil {
+		logger.Error.Printf("[handlers.UpdateSong] Error binding JSON: %s", err)
+		handleError(c, utils.ErrInvalidRequestBody)
+		return
+	}
+
+	err = services.UpdateSong(uint(id), &songUpdate)
+	if err != nil {
+		logger.Error.Printf("[handlers.UpdateSong] Error updating song: %s", err)
+		handleError(c, err)
+		return
+	}
+
+	response := DefaultResponse{Message: fmt.Sprintf("Song with id: %d updated successfully.", id)}
+	c.JSON(http.StatusOK, response)
+}
+
 func SoftDeleteSong(c *gin.Context) {
 	ip := c.ClientIP()
 	idParam := c.Param("id")
