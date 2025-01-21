@@ -29,6 +29,7 @@ func handleError(c *gin.Context, err error) {
 		errors.Is(err, utils.ErrInvalidPaginationParams),
 		errors.Is(err, utils.ErrFailedToParseJSON),
 		errors.Is(err, utils.ErrUnexpectedError),
+		errors.Is(err, utils.ErrInvalidID),
 		errors.Is(err, utils.ErrFailedToGenerateSwagger),
 		errors.Is(err, utils.ErrMissingRequiredField):
 		statusCode = http.StatusBadRequest
