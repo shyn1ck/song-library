@@ -8,6 +8,7 @@ import (
 
 func GetSongs(group, song string, page, limit int) (songs []models.Song, err error) {
 	if page <= 0 || limit <= 0 || limit > 100 {
+		logger.Error.Printf("services.GetSongs: page %d or limit %d", page, limit)
 		return nil, utils.ErrInvalidPaginationParams
 	}
 
