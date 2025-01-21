@@ -56,6 +56,34 @@ func GetSongs(c *gin.Context) {
 	c.JSON(http.StatusOK, songs)
 }
 
+func GetSongByID(c *gin.Context) {
+	ip := c.ClientIP()
+	idParam := c.Param("id")
+
+	logger.Info.Printf("[handlers.GetSongByID] Client IP: %s - Request to get song by id: %s", ip, idParam)
+
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		logger.Error.Printf("[handlers.GetSongByID] Invalid ID format: %s", err)
+		handleError(c, utils.ErrInvalidID)
+		return
+	}
+
+	song, err := services.GetSongByID(uint(id))
+	if err != nil {
+		logger.Error.Printf("[handlers.GetSongByID] Error getting song: %s", err)
+		handleError(c, err)
+		return
+	}
+
+	if song == nil {
+		logger.Info.Printf("[handlers.GetSongByID] Song not found")
+		handleError(c, utils.ErrSongNotFound)
+		return
+	}
+	c.JSON(http.StatusOK, song)
+}
+
 func GetLyrics(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.GetLyrics]: Client with IP=%s, requested to get lyrics", ip)
@@ -148,13 +176,6 @@ func GetLyricsByText(c *gin.Context) {
 
 	logger.Info.Printf("[handlers.GetLyricsByText]: Client with IP=%s, successfully retrieved lyrics by text", ip)
 	c.JSON(http.StatusOK, lyrics)
-}
-
-func GetSongByID(c *gin.Context) {
-	id := c.Param("id")
-	ip := c.ClientIP()
-	logger.Info.Printf("[handlers.GetSongByID] Client IP: %s - Request to get song by id: %s\n]", ip, id)
-
 }
 
 func AddSong(c *gin.Context) {
