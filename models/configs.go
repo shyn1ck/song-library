@@ -20,10 +20,11 @@ type LogParams struct {
 }
 
 type AppParams struct {
-	GinMode    string `json:"gin_mode"`    // Gin mode (e.g., debug or release)
-	PortRun    string `json:"port_run"`    // Port on which the server will run
-	ServerURL  string `json:"server_url"`  // Server URL
-	ServerName string `json:"server_name"` // Server name
+	GinMode    string `json:"gin_mode"`     // Gin mode (e.g., debug or release)
+	PortRun    string `json:"port_run"`     // Port on which the server will run
+	ApiPortRun string `json:"api_port_run"` // Port on which the api will run
+	ServerURL  string `json:"server_url"`   // Server URL
+	ServerName string `json:"server_name"`  // Server name
 }
 
 type PostgresParams struct {
