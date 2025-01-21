@@ -141,6 +141,30 @@ func SoftDeleteSong(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+func HardDeleteSong(c *gin.Context) {
+	ip := c.ClientIP()
+	idParam := c.Param("id")
+
+	logger.Info.Printf("[handlers.HardDeleteSong] Client IP: %s - Request to hard delete song by id: %s", ip, idParam)
+
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		logger.Error.Printf("[handlers.HardDeleteSong] Invalid ID format: %s", err)
+		handleError(c, utils.ErrInvalidID)
+		return
+	}
+
+	err = services.HardDeleteSong(uint(id))
+	if err != nil {
+		logger.Error.Printf("[handlers.HardDeleteSong] Error hard deleting song: %s", err)
+		handleError(c, err)
+		return
+	}
+
+	response := NewDefaultResponse("Song successfully hard deleted")
+	c.JSON(http.StatusOK, response)
+}
+
 func GetLyrics(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.GetLyrics]: Client with IP=%s, requested to get lyrics", ip)
