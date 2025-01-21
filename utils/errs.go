@@ -25,5 +25,4 @@ var (
 	ErrInvalidRequestBody           = errors.New("ErrInvalidRequestBody")
 	ErrInvalidRequestParameter      = errors.New("ErrInvalidRequestParameter")
 	ErrGroupNotFound                = errors.New("ErrGroupNotFound")
-	ErrSongNotFound                 = errors.New("ErrSongNotFound")
 )
