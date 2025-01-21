@@ -5,39 +5,149 @@ import (
 	"net/http"
 	"song-library/logger"
 	services "song-library/pkg/services"
+	"song-library/utils"
 	"strconv"
 )
 
 func GetSongs(c *gin.Context) {
+	ip := c.ClientIP()
+	logger.Info.Printf("[GetSongs]: Client with IP=%s, requested to get songs", ip)
 	group := c.Query("group")
 	song := c.Query("song")
 
 	pageParam := c.Query("page")
 	limitParam := c.Query("limit")
 
-	if pageParam == "" {
-		pageParam = "1"
+	page := 1
+	limit := 10
+
+	if pageParam != "" {
+		var err error
+		page, err = strconv.Atoi(pageParam)
+		if err != nil {
+			handleError(c, utils.ErrInvalidPaginationParams)
+			return
+		}
 	}
 
-	if limitParam == "" {
-		limitParam = "10"
+	if limitParam != "" {
+		var err error
+		limit, err = strconv.Atoi(limitParam)
+		if err != nil {
+			handleError(c, utils.ErrInvalidPaginationParams)
+			return
+		}
 	}
-
-	page, _ := strconv.Atoi(pageParam)
-	limit, _ := strconv.Atoi(limitParam)
 
 	songs, err := services.GetSongs(group, song, page, limit)
 	if err != nil {
+		logger.Error.Printf("[handlers.GetSongs]: Error: %v", err)
 		handleError(c, err)
 		return
 	}
 
 	if songs == nil {
+		logger.Info.Printf("[handlers.GetSongs]: Client with IP=%s, no songs found", ip)
 		c.JSON(http.StatusOK, DefaultResponse{Message: "No songs found."})
 		return
 	}
 
+	logger.Info.Printf("[handlers.GetSongs]: Client with IP=%s, successfully retrieved songs", ip)
 	c.JSON(http.StatusOK, songs)
+}
+
+func GetLyrics(c *gin.Context) {
+	ip := c.ClientIP()
+	logger.Info.Printf("[handlers.GetLyrics]: Client with IP=%s, requested to get lyrics", ip)
+
+	song := c.Param("title")
+	pageParam := c.Query("page")
+	limitParam := c.Query("limit")
+
+	page := 1
+	limit := 10
+	if pageParam != "" {
+		var err error
+		page, err = strconv.Atoi(pageParam)
+		if err != nil {
+			handleError(c, utils.ErrInvalidPaginationParams)
+			return
+		}
+	}
+
+	if limitParam != "" {
+		var err error
+		limit, err = strconv.Atoi(limitParam)
+		if err != nil {
+			handleError(c, utils.ErrInvalidPaginationParams)
+			return
+		}
+	}
+
+	logger.Info.Printf("[handlers.GetLyrics]: Searching for song: %s", song)
+
+	lyrics, err := services.GetLyrics(song, page, limit)
+	if err != nil {
+		logger.Error.Printf("[handlers.GetLyrics]: Error: %v", err)
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("[handlers.GetLyrics]: Client with IP=%s, successfully retrieved lyrics", ip)
+	c.JSON(http.StatusOK, lyrics)
+}
+
+func GetLyricsByText(c *gin.Context) {
+	ip := c.ClientIP()
+	logger.Info.Printf("[handlers.GetLyricsByText]: Client with IP=%s, requested to get lyrics by text", ip)
+
+	searchText := c.Query("search")
+	if searchText == "" {
+		handleError(c, utils.ErrInvalidText)
+		return
+	}
+
+	pageParam := c.Query("page")
+	limitParam := c.Query("limit")
+
+	page := 1
+	limit := 10
+
+	if pageParam != "" {
+		var err error
+		page, err = strconv.Atoi(pageParam)
+		if err != nil {
+			handleError(c, utils.ErrInvalidPaginationParams)
+			return
+		}
+	}
+
+	if limitParam != "" {
+		var err error
+		limit, err = strconv.Atoi(limitParam)
+		if err != nil {
+			handleError(c, utils.ErrInvalidPaginationParams)
+			return
+		}
+	}
+
+	logger.Info.Printf("[handlers.GetLyricsByText]: Searching for lyrics containing: %s", searchText)
+
+	lyrics, err := services.GetLyricsByText(searchText, page, limit)
+	if err != nil {
+		logger.Error.Printf("[handlers.GetLyricsByText]: Error: %v", err)
+		handleError(c, err)
+		return
+	}
+
+	if lyrics == nil {
+		logger.Info.Printf("[handlers.GetLyricsByText]: Client with IP=%s, no lyrics found", ip)
+		c.JSON(http.StatusOK, DefaultResponse{Message: "No lyrics found."})
+		return
+	}
+
+	logger.Info.Printf("[handlers.GetLyricsByText]: Client with IP=%s, successfully retrieved lyrics by text", ip)
+	c.JSON(http.StatusOK, lyrics)
 }
 
 func GetSongByID(c *gin.Context) {
