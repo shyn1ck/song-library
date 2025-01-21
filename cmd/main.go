@@ -23,7 +23,7 @@ import (
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		logger.Error.Printf("Error loading .env file")
+		logger.Error.Fatalf("Error loading .env file: %v", err)
 	} else {
 		fmt.Println(".env file loaded successfully")
 	}
@@ -49,6 +49,8 @@ func main() {
 	defer func() {
 		if err := db.CloseDBConn(); err != nil {
 			logger.Error.Printf("Error closing database connection: %v", err)
+		} else {
+			fmt.Println("Database connection closed successfully")
 		}
 	}()
 
