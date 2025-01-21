@@ -23,25 +23,25 @@ import (
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		logger.Error.Fatalf("Error loading .env file: %v", err)
+		fmt.Printf("Error loading .env file: %v", err)
 	} else {
 		fmt.Println(".env file loaded successfully")
 	}
 
 	if err := configs.ReadSettings(); err != nil {
-		logger.Error.Fatalf("Error reading settings: %s", err)
+		fmt.Printf("Error reading settings: %v", err)
 	} else {
 		fmt.Printf("Settings loaded: %+v\n", configs.AppSettings.AppParams)
 	}
 
 	if err := logger.Init(); err != nil {
-		logger.Error.Fatalf("Error initializing logger: %s", err)
+		fmt.Printf("Error initializing logger: %v", err)
 	} else {
 		fmt.Println("Logger initialized successfully")
 	}
 
 	if err := db.ConnectToDB(); err != nil {
-		logger.Error.Fatalf("Error connecting to database: %s", err)
+		fmt.Printf("Error connecting to DB: %v", err)
 	} else {
 		fmt.Println("Connected to the database successfully")
 	}
@@ -55,7 +55,7 @@ func main() {
 	}()
 
 	if err := db.Migrate(); err != nil {
-		logger.Error.Fatalf("Failed to run database migrations: %v", err)
+		fmt.Printf("Error initializing database migrations: %v", err)
 	} else {
 		fmt.Println("Database migrations completed successfully")
 	}
@@ -70,7 +70,7 @@ func main() {
 
 	secondaryServer := new(server.Server)
 	go func() {
-		fmt.Printf("Starting secondary server on port %s\n", configs.AppSettings.AppParams.ApiPortRun)
+		fmt.Printf("Starting secondary server for API on port %s\n", configs.AppSettings.AppParams.ApiPortRun)
 		if err := secondaryServer.Run(configs.AppSettings.AppParams.ApiPortRun, handlers.InitRoutes()); err != nil {
 			logger.Error.Fatalf("Error starting secondary HTTP server: %s", err)
 		}
