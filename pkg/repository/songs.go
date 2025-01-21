@@ -52,6 +52,14 @@ func GetSongByID(id uint) (*models.Song, error) {
 	return &song, nil
 }
 
+func UpdateSong(song *models.Song) error {
+	if err := db.GetDBConn().Model(song).Updates(song).Error; err != nil {
+		logger.Error.Printf("[repository.UpdateSong]: Error updating song: %s\n", err.Error())
+		return err
+	}
+	return nil
+}
+
 func GetLyrics(songName string, page, limit int) (verses []string, err error) {
 	var song models.Song
 	err = db.GetDBConn().Where("song = ? AND deleted_at IS NULL", songName).First(&song).Error
