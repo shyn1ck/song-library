@@ -64,6 +64,7 @@ func GetLyrics(songName string, page, limit int) (verses []string, err error) {
 	var song models.Song
 	err = db.GetDBConn().Where("song = ? AND deleted_at IS NULL", songName).First(&song).Error
 	if err != nil {
+		logger.Error.Printf("[repository.GetLyrics]: Error finding song: %s\n", err.Error())
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, utils.ErrSongNotFound
 		}
