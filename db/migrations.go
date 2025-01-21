@@ -14,6 +14,7 @@ func Migrate() (err error) {
 
 	migrateModels := []interface{}{
 		&models.Song{},
+		&models.SongDetail{},
 	}
 
 	for _, model := range migrateModels {
