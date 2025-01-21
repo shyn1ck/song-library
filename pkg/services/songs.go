@@ -19,6 +19,31 @@ func GetSongs(group, song string, page, limit int) (songs []models.Song, err err
 	return songs, nil
 }
 
+func GetSongByID(id uint) (song *models.Song, err error) {
+	song, err = repository.GetSongByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	if song == nil {
+		return nil, utils.ErrSongNotFound
+	}
+
+	return song, nil
+}
+
+func SoftDeleteSong(id uint) error {
+	song, err := repository.GetSongByID(id)
+	if err != nil {
+		return err
+	}
+
+	if song == nil {
+		return utils.ErrSongNotFound
+	}
+	return repository.SoftDeleteSong(id)
+}
+
 func GetLyrics(song string, page int, limit int) ([]string, error) {
 	if page <= 0 || limit <= 0 || limit > 100 {
 		return nil, utils.ErrInvalidPaginationParams
