@@ -65,6 +65,7 @@ func SoftDeleteSong(id uint) error {
 	}
 
 	if song == nil {
+		logger.Error.Printf("[services.SoftDeleteSong]: Song does not exist")
 		return utils.ErrSongNotFound
 	}
 	return repository.SoftDeleteSong(id)
