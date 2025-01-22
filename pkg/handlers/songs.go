@@ -326,6 +326,20 @@ func GetLyrics(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// GetLyricsByText godoc
+// @Summary      Get lyrics by search text
+// @Description  Retrieves lyrics that contain a specific search text with optional pagination.
+// @Tags         Lyrics
+// @Accept       json
+// @Produce      json
+// @Param        search query  string true  "Text to search for within lyrics"
+// @Param        page   query  int     false "Page number" (defaults to 1)
+// @Param        limit  query  int     false "Results per page" (defaults to 10)
+// @Success      200    {object}  LyricsResponse   "Lyrics data"
+// @Failure      400    {object}  ErrorResponse    "Invalid text or pagination parameters"
+// @Failure      404    {object}  ErrorResponse    "No lyrics found"
+// @Failure      500    {object}  ErrorResponse    "Internal server error"
+// @Router       /lyrics/search [get]
 func GetLyricsByText(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.GetLyricsByText]: Client with IP=%s, requested to get lyrics by text", ip)
