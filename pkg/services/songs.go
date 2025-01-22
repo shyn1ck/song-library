@@ -94,16 +94,18 @@ func AddSong(newSongRequest models.NewSongRequest) (*models.Song, error) {
 		}
 	}(resp.Body)
 
-	if resp.StatusCode == http.StatusOK {
-		var songDetail models.SongDetail
-		if err := json.NewDecoder(resp.Body).Decode(&songDetail); err != nil {
-			logger.Error.Printf("[services.AddSong] Failed to decode response: %s", err)
-			return nil, utils.ErrInvalidResponse
+		if resp.StatusCode == http.StatusOK {
+			var songDetail models.SongDetail
+			if err := json.NewDecoder(resp.Body).Decode(&songDetail); err != nil {
+				logger.Error.Printf("[services.AddSong] Failed to decode response: %s", err)
+			} else {
+				song.ReleaseDate = songDetail.ReleaseDate
+				song.Text = songDetail.Text
+				song.Link = songDetail.Link
+			}
+		} else {
+			logger.Error.Printf("[services.AddSong] API returned non-200 status: %d", resp.StatusCode)
 		}
-
-		song.ReleaseDate = songDetail.ReleaseDate
-		song.Text = songDetail.Text
-		song.Link = songDetail.Link
 	}
 
 	if err := repository.AddSong(song); err != nil {
