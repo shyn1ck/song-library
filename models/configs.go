@@ -25,6 +25,7 @@ type AppParams struct {
 	ApiPortRun string `json:"api_port_run"` // Port on which the api will run
 	ServerURL  string `json:"server_url"`   // Server URL
 	ServerName string `json:"server_name"`  // Server name
+	ApiURL     string `json:"api_url"`      // API URL
 }
 
 type PostgresParams struct {
