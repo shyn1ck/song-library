@@ -6,6 +6,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
 	"song-library/configs"
+	_ "song-library/docs"
 )
 
 func InitRoutes() *gin.Engine {
