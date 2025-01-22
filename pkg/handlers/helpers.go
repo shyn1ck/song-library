@@ -24,7 +24,6 @@ func handleError(c *gin.Context, err error) {
 		errors.Is(err, utils.ErrInvalidLink),
 		errors.Is(err, utils.ErrFailedToFetchSongInfoFromAPI),
 		errors.Is(err, utils.ErrDatabaseConnectionFailed),
-		errors.Is(err, utils.ErrSongNotFoundInDatabase),
 		errors.Is(err, utils.ErrInvalidPaginationParams),
 		errors.Is(err, utils.ErrFailedToParseJSON),
 		errors.Is(err, utils.ErrUnexpectedError),
