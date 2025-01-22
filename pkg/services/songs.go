@@ -81,7 +81,9 @@ func AddSong(newSongRequest models.NewSongRequest) (*models.Song, error) {
 		return nil, utils.ErrSongAlreadyExists
 	}
 
-	apiURL := fmt.Sprintf(configs.AppSettings.AppParams.ApiURL, song.Group, song.Song)
+	apiURL := fmt.Sprintf(configs.AppSettings.AppParams.ApiURL, url.QueryEscape(song.Group), url.QueryEscape(song.Song))
+	logger.Info.Printf("Fetching song info from API: %s", apiURL)
+
 	resp, err := http.Get(apiURL)
 	if err != nil {
 		logger.Error.Printf("[services.AddSong] Failed to fetch song info: %s", err)
