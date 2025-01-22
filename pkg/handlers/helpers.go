@@ -13,8 +13,7 @@ func handleError(c *gin.Context, err error) {
 	var errorResponse ErrorResponse
 
 	switch {
-	case errors.Is(err, utils.ErrSongNotFound),
-		errors.Is(err, utils.ErrSongAlreadyExists),
+	case errors.Is(err, utils.ErrSongAlreadyExists),
 		errors.Is(err, utils.ErrInvalidSongData),
 		errors.Is(err, utils.ErrSongDeleteFailed),
 		errors.Is(err, utils.ErrSongUpdateFailed),
