@@ -323,7 +323,7 @@ func GetLyrics(c *gin.Context) {
 	}
 
 	logger.Info.Printf("[handlers.GetLyrics]: Client with IP=%s, successfully retrieved lyrics", ip)
-	c.JSON(http.StatusOK, lyrics)
+	c.JSON(http.StatusOK, response)
 }
 
 func GetLyricsByText(c *gin.Context) {
