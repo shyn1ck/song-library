@@ -93,7 +93,7 @@ func GetLyricsByText(searchText string, page, limit int) ([]string, error) {
 	var songs []models.Song
 	err := db.GetDBConn().Where("text LIKE ? AND deleted_at IS NULL", "%"+searchText+"%").Find(&songs).Error
 	if err != nil {
-		logger.Error.Printf("[repository.GetLyrics]: Error finding songs: %s\n", err.Error())
+		logger.Error.Printf("[repository.GetLyricsByText]: Error finding songs: %s\n", err.Error())
 		return nil, utils.ErrDatabaseConnectionFailed
 	}
 
