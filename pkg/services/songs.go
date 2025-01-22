@@ -85,7 +85,7 @@ func AddSong(newSongRequest models.NewSongRequest) (*models.Song, error) {
 	resp, err := http.Get(apiURL)
 	if err != nil {
 		logger.Error.Printf("[services.AddSong] Failed to fetch song info: %s", err)
-		return nil, utils.ErrAPIRequestFailed
+		return nil, utils.ErrFailedToFetchSongInfoFromAPI
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
