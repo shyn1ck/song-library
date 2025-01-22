@@ -16,7 +16,7 @@ import (
 
 // @title Song Library API ✨
 // @version 1.0
-// @description API for managing a song library. Allows adding, editing, deleting, and searching for songs.
+// @description API for managing a song library.
 
 // @host localhost:8181
 // @BasePath /
