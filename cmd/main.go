@@ -68,14 +68,6 @@ func main() {
 		}
 	}()
 
-	go func() {
-		apiPort := configs.AppSettings.AppParams.ApiPortRun
-		fmt.Printf("Starting API server on port %s\n", apiPort)
-		if err := apiServer.Run(apiPort, handlers.InitRoutes()); err != nil {
-			fmt.Printf("Error starting API server: %s\n", err)
-		}
-	}()
-
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
