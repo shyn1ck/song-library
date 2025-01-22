@@ -138,7 +138,7 @@ func SoftDeleteSong(id uint) (err error) {
 }
 
 func HardDeleteSong(id uint) (err error) {
-	if err = db.GetDBConn().Delete(&models.Song{}, id).Error; err != nil {
+	if err = db.GetDBConn().Unscoped().Where("id = ?", id).Delete(&models.Song{}).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			logger.Error.Printf("[repository.HardDeleteSong]: Error finding song: %s\n", err.Error())
 			return utils.ErrSongNotFound
