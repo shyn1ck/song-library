@@ -11,6 +11,20 @@ import (
 	"strconv"
 )
 
+// GetSongs godoc
+// @Summary      Get songs
+// @Description  Retrieves a list of songs based on optional filters such as group name, song name, pagination, and limit.
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        group    query   string  false  "Group name"
+// @Param        song     query   string  false  "Song name"
+// @Param        page     query   int     false  "Page number"  default(1)
+// @Param        limit    query   int     false  "Number of results per page"  default(10)
+// @Success      200      {array}  models.Song   "Success"  "List of songs"
+// @Failure      400      {object}  ErrorResponse  "Invalid request"
+// @Failure      500      {object}  ErrorResponse  "Internal server error"
+// @Router       /songs [get]
 func GetSongs(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[GetSongs]: Client with IP=%s, requested to get songs", ip)
