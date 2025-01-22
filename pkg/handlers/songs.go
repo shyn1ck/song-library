@@ -181,6 +181,19 @@ func UpdateSong(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// SoftDeleteSong godoc
+// @Summary      Soft delete a song
+// @Description  Soft deletes a song by its unique ID, marking it as deleted without actually removing it from the database.
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        id   path    int     true  "Song ID"
+// @Success      200  {object}  DefaultResponse   "Success"  "Song successfully soft deleted"
+// @Failure      400  {object}  ErrorResponse  "Invalid ID format"
+// @Failure      404  {object}  ErrorResponse  "Song not found"
+// @Failure      500  {object}  ErrorResponse  "Internal server error"
+// @Security     ApiKeyAuth
+// @Router       /songs/{id} [delete]
 func SoftDeleteSong(c *gin.Context) {
 	ip := c.ClientIP()
 	idParam := c.Param("id")
