@@ -21,6 +21,10 @@ import (
 // @host localhost:8181
 // @BasePath /
 
+// @contact.name   Personal tg
+// @contact.url    https://t.me/parvizjon_hasanov
+// @contact.email  hy.parvizjon@outlook.com
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		fmt.Printf("Error loading .env file: %v\n", err)
