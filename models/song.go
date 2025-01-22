@@ -19,3 +19,8 @@ type SongDetail struct {
 	Text        string `json:"text"`
 	Link        string `json:"link"`
 }
+
+type NewSongRequest struct {
+	Group string `json:"group"`
+	Song  string `json:"song"`
+}
