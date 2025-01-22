@@ -19,3 +19,7 @@ func NewErrorResponse(message string) ErrorResponse {
 		Error: message,
 	}
 }
+
+type LyricsResponse struct {
+	Lyrics string `json:"lyrics"`
+}
