@@ -304,6 +304,9 @@ func GetLyrics(c *gin.Context) {
 		handleError(c, err)
 		return
 	}
+	response := LyricsResponse{
+		Lyrics: lyrics,
+	}
 
 	logger.Info.Printf("[handlers.GetLyrics]: Client with IP=%s, successfully retrieved lyrics", ip)
 	c.JSON(http.StatusOK, lyrics)
