@@ -150,6 +150,19 @@ func AddSong(c *gin.Context) {
 	}
 }
 
+// UpdateSong godoc
+// @Summary      Update an existing song
+// @Description  Updates an existing song by its unique ID with new details, such as title, artist, release date, and link.
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        id   path    int     true  "Song ID"
+// @Param        song body    	models.Song  true  "Updated song details"
+// @Success      200  {object}  DefaultResponse   "Success"  "Song updated successfully"
+// @Failure      400  {object}  ErrorResponse  "Invalid ID format or request body"
+// @Failure      404  {object}  ErrorResponse  "Song not found"
+// @Failure      500  {object}  ErrorResponse  "Internal server error"
+// @Router       /songs/{id} [put]
 func UpdateSong(c *gin.Context) {
 	ip := c.ClientIP()
 	idParam := c.Param("id")
