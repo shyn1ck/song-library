@@ -39,7 +39,10 @@ func handleError(c *gin.Context, err error) {
 		statusCode = http.StatusBadRequest
 		errorResponse = NewErrorResponse(err.Error())
 
-	case errors.Is(err, utils.ErrSongNotFoundInDatabase):
+	case errors.Is(err, utils.ErrSongNotFoundInDatabase),
+		errors.Is(err, utils.ErrSongNotFound),
+		errors.Is(err, utils.ErrGroupNotFound),
+		errors.Is(err, utils.ErrSongNotFoundInDatabase):
 		statusCode = http.StatusNotFound
 		errorResponse = NewErrorResponse(err.Error())
 
