@@ -78,7 +78,7 @@ func AddSong(newSongRequest models.NewSongRequest) (*models.Song, error) {
 		return nil, err
 	}
 	if exists {
-		return nil, fmt.Errorf("song already exists")
+		return nil, utils.ErrSongAlreadyExists
 	}
 
 	apiURL := fmt.Sprintf(configs.AppSettings.AppParams.ApiURL, song.Group, song.Song)
