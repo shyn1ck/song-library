@@ -89,7 +89,6 @@ func GetSongByID(c *gin.Context) {
 func AddSong(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.AddSong] Client IP: %s - Request to add a new song", ip)
-
 	var newSongRequest models.NewSongRequest
 	if err := c.ShouldBindJSON(&newSongRequest); err != nil {
 		logger.Error.Printf("[handlers.AddSong] Error binding JSON: %s", err)
