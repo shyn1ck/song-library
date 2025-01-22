@@ -1,0 +1,408 @@
+basePath: /
+definitions:
+  handlers.DefaultResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handlers.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  handlers.LyricsResponse:
+    properties:
+      lyrics:
+        items:
+          type: string
+        type: array
+    type: object
+  models.NewSongRequest:
+    properties:
+      group:
+        type: string
+      song:
+        type: string
+    type: object
+  models.Song:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      group:
+        type: string
+      id:
+        type: integer
+      link:
+        type: string
+      release_date:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.SongDetail:
+    properties:
+      group:
+        type: string
+      link:
+        type: string
+      releaseDate:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+host: localhost:8181
+info:
+  contact:
+    email: hy.parvizjon@outlook.com
+    name: Personal tg
+    url: https://t.me/parvizjon_hasanov
+  description: API for managing a song library.
+  title: "Song Library API \U0001F3B6"
+  version: "1.0"
+paths:
+  /API/info:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves detailed information about a song based on the group
+        and song title.
+      parameters:
+      - description: Group name (artist/band)
+        in: query
+        name: group
+        required: true
+        type: string
+      - description: Song title
+        in: query
+        name: song
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved song details
+          schema:
+            $ref: '#/definitions/models.SongDetail'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get song details
+      tags:
+      - API
+  /lyrics/{title}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the lyrics of a song based on the song title with optional
+        pagination.
+      parameters:
+      - description: Song title
+        in: path
+        name: title
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Results per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lyrics data
+          schema:
+            $ref: '#/definitions/handlers.LyricsResponse'
+        "400":
+          description: Invalid pagination parameters
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Song not found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get lyrics of a song
+      tags:
+      - Lyrics
+  /lyrics/search:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves lyrics that contain a specific search text with optional
+        pagination.
+      parameters:
+      - description: Text to search for within lyrics
+        in: query
+        name: search
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Results per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lyrics data
+          schema:
+            $ref: '#/definitions/handlers.LyricsResponse'
+        "400":
+          description: Invalid text or pagination parameters
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: No lyrics found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get lyrics by search text
+      tags:
+      - Lyrics
+  /songs:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of songs based on optional filters such as group
+        name, song name, pagination, and limit.
+      parameters:
+      - description: Group name
+        in: query
+        name: group
+        type: string
+      - description: Song name
+        in: query
+        name: song
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of results per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success"  "List of songs
+          schema:
+            items:
+              $ref: '#/definitions/models.Song'
+            type: array
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get songs
+      tags:
+      - Songs
+    post:
+      consumes:
+      - application/json
+      description: Adds a new song to the database with the provided details, such
+        as title, artist, release date, and link.
+      parameters:
+      - description: New song details
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewSongRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success"  "Song added successfully with provided data only.
+          schema:
+            $ref: '#/definitions/handlers.DefaultResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Add a new song
+      tags:
+      - Songs
+  /songs/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft deletes a song by its unique ID, marking it as deleted without
+        actually removing it from the database.
+      parameters:
+      - description: Song ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success"  "Song successfully soft deleted
+          schema:
+            $ref: '#/definitions/handlers.DefaultResponse'
+        "400":
+          description: Invalid ID format
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Song not found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Soft delete a song
+      tags:
+      - Songs
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a song by its unique ID.
+      parameters:
+      - description: Song ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success"  "Song details
+          schema:
+            $ref: '#/definitions/models.Song'
+        "400":
+          description: Invalid ID format
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Song not found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get song by ID
+      tags:
+      - Songs
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing song by its unique ID with new details, such
+        as title, artist, release date, and link.
+      parameters:
+      - description: Song ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated song details
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success"  "Song updated successfully
+          schema:
+            $ref: '#/definitions/handlers.DefaultResponse'
+        "400":
+          description: Invalid ID format or request body
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Song not found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Update an existing song
+      tags:
+      - Songs
+  /songs/hard/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Permanently deletes a song by its unique ID from the database.
+        This action cannot be undone.
+      parameters:
+      - description: Song ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success"  "Song successfully hard deleted
+          schema:
+            $ref: '#/definitions/handlers.DefaultResponse'
+        "400":
+          description: Invalid ID format
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Song not found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Hard delete a song
+      tags:
+      - Songs
+swagger: "2.0"
