@@ -14,7 +14,7 @@ import (
 	"syscall"
 )
 
-// @title Song Library API ✨
+// @title Song Library API 🎶
 // @version 1.0
 // @description API for managing a song library.
 
