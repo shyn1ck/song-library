@@ -59,7 +59,6 @@ func main() {
 	fmt.Println("Database migrations completed successfully")
 
 	mainServer := new(server.Server)
-	apiServer := new(server.Server)
 
 	go func() {
 		appPort := configs.AppSettings.AppParams.PortRun
