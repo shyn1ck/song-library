@@ -25,4 +25,5 @@ var (
 	ErrInvalidRequestBody           = errors.New("ErrInvalidRequestBody")
 	ErrInvalidRequestParameter      = errors.New("ErrInvalidRequestParameter")
 	ErrGroupNotFound                = errors.New("ErrGroupNotFound")
+	ErrAPIRequestFailed             = errors.New("ErrAPIRequestFailed")
 )
