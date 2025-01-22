@@ -147,3 +147,14 @@ func HardDeleteSong(id uint) (err error) {
 	}
 	return nil
 }
+
+func SongExists(group, song string) (bool, error) {
+	var count int64
+	if err := db.GetDBConn().Model(&models.Song{}).
+		Where("group = ? AND song = ?", group, song).
+		Count(&count).Error; err != nil {
+		logger.Error.Printf("[repository.SongExists]: Error checking if song exists: %s\n", err.Error())
+		return false, err
+	}
+	return count > 0, nil
+}
