@@ -205,7 +205,6 @@ func UpdateSong(c *gin.Context) {
 // @Failure      400  {object}  ErrorResponse  "Invalid ID format"
 // @Failure      404  {object}  ErrorResponse  "Song not found"
 // @Failure      500  {object}  ErrorResponse  "Internal server error"
-// @Security     ApiKeyAuth
 // @Router       /songs/{id} [delete]
 func SoftDeleteSong(c *gin.Context) {
 	ip := c.ClientIP()
