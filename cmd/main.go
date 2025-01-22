@@ -34,6 +34,11 @@ func main() {
 		fmt.Printf("Settings loaded: %+v\n", configs.AppSettings.AppParams)
 	}
 
+	if err := logger.Init(); err != nil {
+		fmt.Printf("Error initializing logger: %v\n", err)
+	}
+	fmt.Println("Logger initialized successfully")
+
 	if err := db.ConnectToDB(); err != nil {
 		fmt.Printf("Error connecting to DB: %v\n", err)
 		return
