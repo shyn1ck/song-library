@@ -8,7 +8,7 @@ import (
 )
 
 func GetSongDetail(group, song string) (models.SongDetail, error) {
-	groupExists, err := repository.GetInfoByGroup(group)
+	songDetails, err := repository.GetInfoByGroup(group)
 	if err != nil {
 		logger.Error.Printf("[services.GetSongDetail]: Error checking song exists: %s", err.Error())
 		return models.SongDetail{}, err
