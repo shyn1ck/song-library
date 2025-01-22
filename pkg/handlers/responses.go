@@ -21,5 +21,5 @@ func NewErrorResponse(message string) ErrorResponse {
 }
 
 type LyricsResponse struct {
-	Lyrics string `json:"lyrics"`
+	Lyrics []string `json:"lyrics"`
 }
