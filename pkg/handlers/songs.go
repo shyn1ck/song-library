@@ -231,6 +231,19 @@ func SoftDeleteSong(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// HardDeleteSong godoc
+// @Summary      Hard delete a song
+// @Description  Permanently deletes a song by its unique ID from the database. This action cannot be undone.
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        id   path    int     true  "Song ID"
+// @Success      200  {object}  DefaultResponse   "Success"  "Song successfully hard deleted"
+// @Failure      400  {object}  ErrorResponse  "Invalid ID format"
+// @Failure      404  {object}  ErrorResponse  "Song not found"
+// @Failure      500  {object}  ErrorResponse  "Internal server error"
+// @Security     ApiKeyAuth
+// @Router       /songs/hard/{id} [delete]
 func HardDeleteSong(c *gin.Context) {
 	ip := c.ClientIP()
 	idParam := c.Param("id")
