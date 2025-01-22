@@ -11,7 +11,7 @@ import (
 // ApiInfo godoc
 // @Summary      Get song details
 // @Description  Retrieves detailed information about a song based on the group and song title.
-// @Tags         Songs
+// @Tags         API
 // @Accept       json
 // @Produce      json
 // @Param        group  query   string  true  "Group name (artist/band)"
