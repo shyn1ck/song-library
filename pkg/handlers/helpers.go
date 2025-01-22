@@ -33,6 +33,7 @@ func handleError(c *gin.Context, err error) {
 		errors.Is(err, utils.ErrFailedToGenerateSwagger),
 		errors.Is(err, utils.ErrInvalidRequestBody),
 		errors.Is(err, utils.ErrGroupNotFound),
+		errors.Is(err, utils.ErrSongAlreadyExists),
 		errors.Is(err, utils.ErrInvalidRequestParameter),
 		errors.Is(err, utils.ErrMissingRequiredField):
 		statusCode = http.StatusBadRequest
