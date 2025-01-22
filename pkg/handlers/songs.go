@@ -50,7 +50,7 @@ func GetSongs(c *gin.Context) {
 
 	if songs == nil {
 		logger.Info.Printf("[handlers.GetSongs]: Client with IP=%s, no songs found", ip)
-		c.JSON(http.StatusOK, DefaultResponse{Message: "No songs found."})
+		c.JSON(http.StatusNotFound, DefaultResponse{Message: "No songs found."})
 		return
 	}
 
