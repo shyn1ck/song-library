@@ -72,6 +72,18 @@ func GetSongs(c *gin.Context) {
 	c.JSON(http.StatusOK, songs)
 }
 
+// GetSongByID godoc
+// @Summary      Get song by ID
+// @Description  Retrieves a song by its unique ID.
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        id   path    int     true  "Song ID"
+// @Success      200  {object}  models.Song   "Success"  "Song details"
+// @Failure      400  {object}  ErrorResponse  "Invalid ID format"
+// @Failure      404  {object}  ErrorResponse  "Song not found"
+// @Failure      500  {object}  ErrorResponse  "Internal server error"
+// @Router       /songs/{id} [get]
 func GetSongByID(c *gin.Context) {
 	ip := c.ClientIP()
 	idParam := c.Param("id")
