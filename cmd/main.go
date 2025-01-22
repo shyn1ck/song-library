@@ -78,9 +78,4 @@ func main() {
 		fmt.Printf("Error during application server shutdown: %s\n", err)
 	}
 	fmt.Println("Application server shut down gracefully")
-
-	if err := apiServer.Shutdown(context.Background()); err != nil {
-		fmt.Printf("Error during API server shutdown: %s\n", err)
-	}
-	fmt.Println("API server shut down gracefully")
 }
