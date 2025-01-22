@@ -73,6 +73,14 @@ func AddSong(newSongRequest models.NewSongRequest) (*models.Song, error) {
 		Link:        "",
 	}
 
+	exists, err := repository.SongExists(song.Group, song.Song)
+	if err != nil {
+		return nil, err
+	}
+	if exists {
+		return nil, fmt.Errorf("song already exists")
+	}
+
 	apiURL := fmt.Sprintf(configs.AppSettings.AppParams.ApiURL, song.Group, song.Song)
 	resp, err := http.Get(apiURL)
 	if err != nil {
