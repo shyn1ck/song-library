@@ -59,6 +59,47 @@ func UpdateSong(id uint, songUpdate *models.Song) error {
 	return nil
 }
 
+func AddSong(newSongRequest models.NewSongRequest) (*models.Song, error) {
+	song := &models.Song{
+		Group:       newSongRequest.Group,
+		Song:        newSongRequest.Song,
+		ReleaseDate: "",
+		Text:        "",
+		Link:        "",
+	}
+
+	apiURL := fmt.Sprintf(configs.AppSettings.AppParams.ApiURL, song.Group, song.Song)
+	resp, err := http.Get(apiURL)
+	if err != nil {
+		logger.Error.Printf("[services.AddSong] Failed to fetch song info: %s", err)
+		return nil, utils.ErrAPIRequestFailed
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			logger.Error.Printf("[services.AddSong] Failed to close body reader: %s", err)
+		}
+	}(resp.Body)
+
+	if resp.StatusCode == http.StatusOK {
+		var songDetail models.SongDetail
+		if err := json.NewDecoder(resp.Body).Decode(&songDetail); err != nil {
+			logger.Error.Printf("[services.AddSong] Failed to decode response: %s", err)
+			return nil, utils.ErrInvalidResponse
+		}
+
+		song.ReleaseDate = songDetail.ReleaseDate
+		song.Text = songDetail.Text
+		song.Link = songDetail.Link
+	}
+
+	if err := repository.AddSong(song); err != nil {
+		return nil, err
+	}
+
+	return song, nil
+}
+
 func SoftDeleteSong(id uint) error {
 	song, err := repository.GetSongByID(id)
 	if err != nil {
