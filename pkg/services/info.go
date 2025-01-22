@@ -14,7 +14,7 @@ func GetSongDetail(group, song string) (models.SongDetail, error) {
 		return models.SongDetail{}, err
 	}
 
-	if !groupExists {
+	if len(songDetails) == 0 {
 		return models.SongDetail{}, utils.ErrGroupNotFound
 	}
 
