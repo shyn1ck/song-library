@@ -19,7 +19,7 @@ import (
 // @Success      200    {object}  models.SongDetail  "Successfully retrieved song details"
 // @Failure      400    {object}  ErrorResponse      "Invalid request parameters"
 // @Failure      500    {object}  ErrorResponse      "Internal server error"
-// @Router       http://localhost:8080/API/info [get]
+// @Router       /API/info [get]
 func ApiInfo(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.ApiInfo]: Client with ip: %s request to get InfoSong", ip)
