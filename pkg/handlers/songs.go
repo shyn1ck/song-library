@@ -268,6 +268,20 @@ func HardDeleteSong(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// GetLyrics godoc
+// @Summary      Get lyrics of a song
+// @Description  Retrieves the lyrics of a song based on the song title with optional pagination.
+// @Tags         Lyrics
+// @Accept       json
+// @Produce      json
+// @Param        title  path    string  true  "Song title"
+// @Param        page   query   int     false "Page number" (defaults to 1)
+// @Param        limit  query   int     false "Results per page" (defaults to 10)
+// @Success      200    {object}  LyricsResponse   "Lyrics data"
+// @Failure      400    {object}  ErrorResponse    "Invalid pagination parameters"
+// @Failure      404    {object}  ErrorResponse    "Song not found"
+// @Failure      500    {object}  ErrorResponse    "Internal server error"
+// @Router       /lyrics/{title} [get]
 func GetLyrics(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.GetLyrics]: Client with IP=%s, requested to get lyrics", ip)
