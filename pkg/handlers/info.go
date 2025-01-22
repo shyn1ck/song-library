@@ -8,6 +8,18 @@ import (
 	"song-library/utils"
 )
 
+// ApiInfo godoc
+// @Summary      Get song details
+// @Description  Retrieves detailed information about a song based on the group and song title.
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        group  query   string  true  "Group name (artist/band)"
+// @Param        song   query   string  true  "Song title"
+// @Success      200    {object}  models.SongDetail  "Successfully retrieved song details"
+// @Failure      400    {object}  ErrorResponse      "Invalid request parameters"
+// @Failure      500    {object}  ErrorResponse      "Internal server error"
+// @Router       http://localhost:8080/API/info [get]
 func ApiInfo(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.ApiInfo]: Client with ip: %s request to get InfoSong", ip)
