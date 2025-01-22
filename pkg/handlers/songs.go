@@ -86,6 +86,33 @@ func GetSongByID(c *gin.Context) {
 	c.JSON(http.StatusOK, song)
 }
 
+func AddSong(c *gin.Context) {
+	ip := c.ClientIP()
+	logger.Info.Printf("[handlers.AddSong] Client IP: %s - Request to add a new song", ip)
+
+	var newSongRequest models.NewSongRequest
+	if err := c.ShouldBindJSON(&newSongRequest); err != nil {
+		logger.Error.Printf("[handlers.AddSong] Error binding JSON: %s", err)
+		handleError(c, utils.ErrInvalidRequestBody)
+		return
+	}
+
+	song, err := services.AddSong(newSongRequest)
+	if err != nil {
+		logger.Error.Printf("[handlers.AddSong] Error adding song: %s", err)
+		handleError(c, err)
+		return
+	}
+
+	if song.ReleaseDate != "" || song.Text != "" || song.Link != "" {
+		response := DefaultResponse{Message: "Song added successfully with additional data."}
+		c.JSON(http.StatusOK, response)
+	} else {
+		response := DefaultResponse{Message: "Song added successfully with provided data only."}
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 func UpdateSong(c *gin.Context) {
 	ip := c.ClientIP()
 	idParam := c.Param("id")
