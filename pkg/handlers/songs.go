@@ -285,9 +285,3 @@ func GetLyricsByText(c *gin.Context) {
 	logger.Info.Printf("[handlers.GetLyricsByText]: Client with IP=%s, successfully retrieved lyrics by text", ip)
 	c.JSON(http.StatusOK, lyrics)
 }
-
-func AddSong(c *gin.Context) {
-	ip := c.ClientIP()
-	logger.Info.Printf("[handlers.AddSong] Client IP: %s - Request to add song\n", ip)
-
-}
