@@ -113,7 +113,6 @@ func GetLyricsByText(searchText string, page, limit int) ([]string, error) {
 	if end > len(verses) {
 		end = len(verses)
 	}
-
 	return verses[start:end], nil
 }
 
