@@ -112,6 +112,18 @@ func GetSongByID(c *gin.Context) {
 	c.JSON(http.StatusOK, song)
 }
 
+// AddSong godoc
+// @Summary      Add a new song
+// @Description  Adds a new song to the database with the provided details, such as title, artist, release date, and link.
+// @Tags         Songs
+// @Accept       json
+// @Produce      json
+// @Param        song  body    models.NewSongRequest  true  "New song details"
+// @Success      200   {object}  DefaultResponse   "Success"  "Song added successfully with additional data."
+// @Success      200   {object}  DefaultResponse   "Success"  "Song added successfully with provided data only."
+// @Failure      400   {object}  ErrorResponse  "Invalid request body"
+// @Failure      500   {object}  ErrorResponse  "Internal server error"
+// @Router       /songs [post]
 func AddSong(c *gin.Context) {
 	ip := c.ClientIP()
 	logger.Info.Printf("[handlers.AddSong] Client IP: %s - Request to add a new song", ip)
